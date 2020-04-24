@@ -1,4 +1,4 @@
-import * as THREE from './three.module.js';
+import * as THREE from '../three/build/three.module.js';
 
 export default function main() {
     //Create renderer + Canvas

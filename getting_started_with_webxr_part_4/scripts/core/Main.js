@@ -1,5 +1,6 @@
-import * as THREE from './three.module.js';
-import { VRButton } from './VRButton.js';
+import * as THREE from '../three/build/three.module.js';
+import SessionHandler from './SessionHandler.js';
+import global from './global.js';
 
 export default class Main {
     constructor() {
@@ -8,7 +9,7 @@ export default class Main {
         this._camera;
         this._shapes;
         this._clock = new THREE.Clock();
-        this._container = document.querySelector('#container');
+        this._container = document.getElementById('container');
 
         this._createRenderer();
         this._createScene();
@@ -16,15 +17,18 @@ export default class Main {
         this._createAssets();
         this._addEventListeners();
 
+        this._sessionHandler = new SessionHandler(this._renderer, this._camera);
+
         this._renderer.setAnimationLoop(() => { this._update() });
     }
 
     _createRenderer() {
         this._renderer = new THREE.WebGLRenderer({ antialias : true });
         this._renderer.setSize(window.innerWidth, window.innerHeight);
-        this._renderer.xr.enabled = true;
         this._container.appendChild(this._renderer.domElement);
-        this._container.appendChild(VRButton.createButton(this._renderer));
+        if(global.deviceType == "XR") {
+            this._renderer.xr.enabled = true;
+        }
 
     }
 
@@ -98,6 +102,7 @@ export default class Main {
         let rotationAmount = 2 * Math.PI * timeDelta * 0.1; //0.1 rotations per second
         this._shapes.rotation.x += rotationAmount;
         this._shapes.rotation.y += rotationAmount;
+        this._sessionHandler.update();
         this._renderer.render(this._scene, this._camera);
     }
 }
