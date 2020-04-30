@@ -52,7 +52,7 @@ export default class Main {
     _createAssets() {
         let skybox = new Skybox({
             "Path": "./images/skyboxes/space/",
-            "File Extension": ".png"
+            "File Extension": ".jpg"
         });
         skybox.addToScene(this._scene);
 
